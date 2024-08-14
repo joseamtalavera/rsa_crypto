@@ -4,11 +4,15 @@ import React, { useState } from 'react';
 import { Container, Box, Typography, Button, TextField, InputAdornment, IconButton } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
-// function to choose prime number
+// function to check that a number is prime.
 const isPrime = (num) => {
+  //Numbers less than 2 are not prime.
   if (num <= 1) return false;
+  // 2 and 3 are prime numbers.
   if (num <= 3) return true;
+  // Numbers divisible by 2 or 3 are not prime.
   if (num % 2 === 0 || num % 3 === 0) return false;
+  // The loop checks the divisibility of the number by 6k ± 1.
     for(let i= 5; i*i <= num; i+=6){
       if(num % i === 0 || num % (i+2) === 0) return false;
     }
@@ -68,17 +72,6 @@ const App = () => {
   const [e, setE] = useState('');
   const [ keys, setKeys ] = useState(null);
 
-  const handleGenerate = () => {
-    const primeP = parseInt(p, 10);
-    const primeQ = parseInt(q, 10);
-    if (isPrime(primeP) && isPrime(primeQ) && primeP !== primeQ) {
-      const keyPair = generateKeyPair(primeP, primeQ);
-      setKeys(keyPair);
-    }else{
-      alert('Please enter two different prime numbers');
-    }
-  }
-
   // We randomly choose two prime numbers p and q with p ≠ q.
 
   const handleDifferentRandomPrimes = () => {
@@ -114,9 +107,12 @@ const App = () => {
 
 
   const handleGenerateE = () => {
+    // To generate e, fist we calculate the Euler's totient function φ(M) = (p - 1)(q - 1).
     const phiM = (p - 1) * (q - 1);
+    // e is initialized to 3 as it makes the process more efficient.
     let e = 3;
     while(gcd(e, phiM) !== 1){
+      // Incresing the value of e by 2 it remains odd.
       e += 2;
     }
     setE(e);
@@ -197,7 +193,8 @@ const App = () => {
           value={e}
           fullWidth
           margin="normal"
-          InputProps={{ readOnly: true }}
+          onChange={(e) => setE(e.target.value)}
+          //InputProps={{ readOnly: true }}
         />
       </Box>
 
@@ -206,7 +203,7 @@ const App = () => {
         <Typography variant="h6" gutterBottom>
           Step 3: Click the button to generate the key pair.
         </Typography>
-        <Button variant="contained" color="primary" onClick={handleGenerateKeys} sx={{ mb: 2 }}>
+        <Button variant="contained" onClick={handleGenerateKeys} sx={{ mb: 2, backgroundColor: 'green' }}>
           Generate Key Pair
         </Button>
         {keys && (
