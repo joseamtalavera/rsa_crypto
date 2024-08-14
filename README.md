@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# Getting Started with rsa_crypto App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was bootstrapped with [Create React App].
 
 ## Available Scripts
 
@@ -17,7 +17,7 @@ You may also see any lint errors in the console.
 ### `npm test`
 
 Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+See the section about [running tests].
 
 ### `npm run build`
 
@@ -27,45 +27,20 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
 ### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Generation of the Key Pair
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Before we can encrypt messages with the RSA algorithm, we must first generate a key pair consisting of a public and private key. To this end we proceed as follows:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+1. We randomly choose two prime numbers p and q with p ≠ q.
+2. We calculate the product of the two prime numbers M := p · q. We call M the RSA module.
+3. We calculate Euler’s φ function of M. Because M is a product of prime numbers and Euler’s φ function is multiplicative it applies that:
+   
+   φ(M) = φ(p · q) = φ(p) · φ(q) = (p − 1) · (q − 1).
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-# rsa_crypto
+4. We choose a number e that is coprime to φ(M) with 1 < e < φ(M). Thus gcd(e, φ(M)) = 1.
+5. We determine a number d with ed ≡ 1 mod φ(M), thus φ(M)|(1 − ed). For this we can use, for example, the extended Euclidean algorithm.
+6. The public key is the tuple (e, M). The private key is the tuple (d, M). The numbers p, q and φ(M) are no longer needed after the key pair has been generated and can be deleted or destroyed.

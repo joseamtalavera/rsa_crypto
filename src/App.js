@@ -1,8 +1,8 @@
-// App.js is the root component of the application. It is a functional component that returns a div element with the text "Hello, React!".
+// App.js 
 
 import React, { useState } from 'react';
-//import bigInt from 'big-integer';
-import { Container, Box, Typography, Button, TextField } from '@mui/material';
+import { Container, Box, Typography, Button, TextField, InputAdornment, IconButton } from '@mui/material';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 // function to choose prime number
 const isPrime = (num) => {
@@ -15,10 +15,15 @@ const isPrime = (num) => {
   return true;
 }
 
-// function to generate prime number
-const generatePrime = (min, max) => {
+// Function to creata a new prime number taking two parameters min and max.
+const createPrime = (min, max) => {
+  // Math.random() fucntion generate a random floating point number between 0 (inclusive ) and 1 (exclusive ).
+  // Math.floor() function rounds the number to the nearet whole number.
+  // *(max - min) makes the range to [0, max - min). So it generates a random number between 0 and max - min.
+  // adding min to the above expression makes the range to [min, max). Where '[' means inclusive and ')' means exclusive. 
   let prime = Math.floor(Math.random() * (max - min)) + min;
   while(!isPrime(prime)){
+    // The while loop generates a new prime until the generated number is a prime. 
     prime = Math.floor(Math.random() * (max - min)) + min;
   } 
   return prime;
@@ -59,7 +64,7 @@ const generateKeyPair = (p, q, e) => {
 const App = () => {
   const [p, setP] = useState('');
   const [q, setQ] = useState('');
-  const [n, setN] = useState('');
+  const [m, setM] = useState('');
   const [e, setE] = useState('');
   const [ keys, setKeys ] = useState(null);
 
@@ -74,13 +79,39 @@ const App = () => {
     }
   }
 
-  const handleGenerateRandomPrimes = () => {
-    const primeP = generatePrime(100, 1000);
-    const primeQ = generatePrime(100, 1000);
+  // We randomly choose two prime numbers p and q with p ≠ q.
+
+  const handleDifferentRandomPrimes = () => {
+    // generate two prime numbers p and q. 
+    //It calls the function generatePrime() to generate a prime number between 100 and 1000.
+    const primeP = createPrime(100, 1000);
+    let primeQ = createPrime(100, 1000);
+    // The while loop makes sure tha p and q are different.
+    // It generates a new prime number until the p and qu are different.
+    while (primeP === primeQ) {
+      primeQ = createPrime(100, 1000);
+    }
+    // The state variables p, q, and n are udpdated with the new prime numbers.
     setP(primeP);
     setQ(primeQ);
-    setN(primeP * primeQ);
+    setM(primeP * primeQ);
   }
+
+  const handleGenerateN = () => {
+    // p and q are converted to ingegers 
+    //p is the string to be converted, and  10 is the radix of decimal number system.
+    const primeP = parseInt(p, 10);
+    const primeQ = parseInt(q, 10);
+    // Now we check the validity of the prime numbers p and q.
+    if (!isNaN(primeP) && !isNaN(primeQ)) {
+      const manualN = primeP * primeQ;
+      // Updating the state variable n.
+      setM(manualN);
+    } else {
+      alert('Please enter two prime numbers');
+    }
+  }
+
 
   const handleGenerateE = () => {
     const phiM = (p - 1) * (q - 1);
@@ -110,9 +141,9 @@ const App = () => {
       {/* Part 1: Generate Primes */}
       <Box my={2}>
         <Typography variant="h6" gutterBottom>
-          Step 1: Click the button to generate prime numbers p, q, and RSA modulus n.
+          Step 1: Click the button to generate prime numbers p, q, and RSA module M.
         </Typography>
-        <Button variant="contained" color="primary" onClick={handleGenerateRandomPrimes} sx={{ mb: 2 }}>
+        <Button variant="contained" color="primary" onClick={handleDifferentRandomPrimes} sx={{ mb: 2 }}>
           Generate Primes
         </Button>
         <TextField
@@ -121,6 +152,7 @@ const App = () => {
           value={p}
           fullWidth
           margin="normal"
+          onChange={(e) => setP(e.target.value)}
           //InputProps={{ readOnly: true }}
         />
         <TextField
@@ -129,15 +161,25 @@ const App = () => {
           value={q}
           fullWidth
           margin="normal"
+          onChange={(e) => setQ(e.target.value)}
           //InputProps={{ readOnly: true }}
         />
         <TextField
-          label="RSA modulus n"
+          label="RSA module M"
           type="number"
-          value={n}
+          value={m}
           fullWidth
           margin="normal"
-          InputProps={{ readOnly: true }}
+          InputProps={{ 
+            readOnly: true,
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={handleGenerateN}>
+                  <RefreshIcon />
+                </IconButton>
+              </InputAdornment>
+            ),
+           }}
         />
       </Box>
 
