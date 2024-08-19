@@ -103,8 +103,11 @@ const generateKeyPair = (p, q, e) => {
   // The modular inverse of e is calculated using the function modInverse().
   let d = modInverse(e, phiM);
   return [[e, m], [d, m]];
-  }
+}
  
+// Generate the key parir using the prime numbers 11, 13 and coprime e = 23.
+const keyPair = generateKeyPair(11, 13, 23);
+console.log (keyPair);
 
 const App = () => {
   // The state variables p, q, m, e, and keys are initialized using the useState() hook.
@@ -149,14 +152,25 @@ const App = () => {
   // The handleGenerateE() function generates the coprime number e.
   const handleGenerateE = () => {
     // To generate e, fist we calculate the Euler's totient function φ(M) = (p - 1)(q - 1).
-    const phiM = (p - 1) * (q - 1);
+    /* const phiM = (p - 1) * (q - 1);
     // e is initialized to 3 as it makes the process more efficient.
     let e = 3;
     while(gcd(e, phiM) !== 1){
       // Incresing the value of e by 2 it remains odd.
       e += 2;
     }
-    setE(e);
+    setE(e); */
+    const primeP = parseInt(p, 10);
+    const primeQ = parseInt(q, 10);
+    const phiM = (primeP - 1) * (primeQ - 1);
+
+      // Generate a random odd number for e and ensure it is coprime with φ(M)
+      let e;
+      do {
+          e = Math.floor(Math.random() * (phiM - 3)) + 3;
+          if (e % 2 === 0) e++; // Ensure e is odd
+      } while (gcd(e, phiM) !== 1);
+      setE(e);
   }
   // The handleGenerateKeys() function generates the public and private keys.
   const handleGenerateKeys = () => {
