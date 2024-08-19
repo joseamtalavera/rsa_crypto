@@ -1,38 +1,20 @@
 // App.js 
 
-
-// objective is to find the modular inverse of e
-// The modular inverse of e is the value of d such that (d * e) ≡ 1 (mod φ(M)).
+// This the process of generating the RSA key pair: public key (e, m) and private key (d, m).
+// To generate key pair we need to find the modular inverse of e. 
+// The modular inverse of e is the value of d such that d * e ≡ 1 (mod φ(M)).
 // From that equation, we can derive the formula for d as follows:
-// d*e = 1 + k*φ(M)
+// d * e = 1 + k * φ(M)
 // We can rewrite the above equation as:
-// d*e + k*φ(M) = 1
-// now using the Bezout's identity, we can find the value of d and k with the formula:
-// ax + by = gcd(a, b)
-// but we need to make sure that gcd(e, φ(M)) = 1
+// d * e + (-k) * φ(M) = 1
+// Now using the Bezout's identity, we can find the value of d and k with the formula:
+// a * x + b * y = gcd(a, b)
+// But we need to make sure that gcd(e, φ(M)) = 1 to confirm make sure the modular inverse exists.
+
 // The extended Euclidean algorithm can be used to solve this equation.
-// The extended Euclidean algorithm calculates the greatest common divisor of two numbers and the coefficients x and y of the Bezout identity ax + by = gcd(a, b).
+// The extended Euclidean algorithm calculates the greatest common divisor of two numbers.
+// It also calculate he coefficients x and y of the Bezout identity ax + by = gcd(a, b).
 // The coefficients x and y are the modular inverse of e and the modular inverse of φ(M), respectively.
-// The function modInverse() calculates the modular inverse of e with respect to φ(M).
-// The function extendedEuclidean() calculates the coefficients x and y of the Bezout identity ax + by = gcd(a, b).
-// The function gcd() calculates the greatest common divisor of two numbers.
-// The function isPrime() checks if a number is prime.
-// The function createPrime() generates a prime number between a given range.
-// The function generateKeyPair() generates the public and private keys.
-// The App component is the main component that renders the UI.
-// The App component has three parts:
-// Part 1: Generate Primes: It generates two prime numbers p and q and the RSA module M.
-// Part 2: Generate e: It generates the coprime number e.
-// Part 3: Generate Key Pair: It generates the public and private keys.
-// The state variables p, q, m, e, and keys are initialized using the useState() hook.
-// The handleDifferentRandomPrimes() function generates two prime numbers p and q.
-// The handleGenerateM() function generates the RSA module M.
-// The handleGenerateE() function generates the coprime number e.
-// The handleGenerateKeys() function generates the public and private keys.
-// The TextField components are used to display the prime numbers p and q, the RSA module M, the coprime number e, the public key, and the private key.
-// The Button components are used to generate prime numbers, the RSA module M, the coprime number e, and the key pair.
-// The IconButton component is used to refresh the RSA module M.
-// The App component is exported as the default component.
 
 
 
@@ -40,9 +22,12 @@ import React, { useState } from 'react';
 import { Container, Box, Typography, Button, TextField, InputAdornment, IconButton } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
-// function to check that a number is prime.
+// Declaring the functions to be used in the App component.
+
+// Function to check that a number is prime.
 const isPrime = (num) => {
   //Numbers less than 2 are not prime.
+
   if (num <= 1) return false;
   // 2 and 3 are prime numbers.
   if (num <= 3) return true;
@@ -69,7 +54,7 @@ const createPrime = (min, max) => {
   return prime;
 }
 
-// function to calculate the greatest common divisor
+// Function to calculate the greatest common divisor
 const gcd = (a, b) => {
   // Using the Eucledian algorithm, the gcd of any number with 0 is the absolute value of the number.
   if(b === 0) return a;
@@ -78,11 +63,11 @@ const gcd = (a, b) => {
 }
 
 
-// function to perform the extended euclidean algorithm
+// Function to perform the extended euclidean algorithm
 const extendedEuclidean = (a, b) => {
-  // Extended Eclidian algorith use the Bezout identitiy ax+by=gcd(a,b)
+  // Extended Eclidian algorith use to calculate x and y of the Bezout identitiy ax + by = gcd(a,b)
   // The base case of the recursive function is when a is 0. 
-  // In this case, the GCD is b, and the coefficients are x = 0 and y = 1, because: 0x+by=b=gcd(0,b)
+  // In this case, the GCD is b, and the coefficients are x = 0 and y = 1, because: 0x + by = b = gcd(0,b)
   if(a === 0) return [b, 0, 1];
   // For non-zero 'a', the function recursively calls itself with 'b % a' and 'a'.
   // The recursive call breaks down the problem into smaller subproblems. 
@@ -97,9 +82,9 @@ const extendedEuclidean = (a, b) => {
   return [gcd, x, y];
 }
 
-// function to calculate the modular inverse which helps to calculate d which is our objective
+// Function to calculate the modular inverse with respect to φ(M), which helps to calculate d which is our objective
 const modInverse = (a, m) => {
-  // the function returns an array containing the gcd and the modular inverse, in this case x
+  // The function returns an array containing the gcd and the modular inverse, in this case x
   const [gcd, x] = extendedEuclidean(a, m);
   // If the gcd is not 1, the modular inverse does not exist. It means that a and m are not coprime.
   if(gcd !== 1) return null;
@@ -108,7 +93,7 @@ const modInverse = (a, m) => {
   return (x % m + m) % m;
 } 
 
-// function to generate keys
+// Function to generate keys pair
 const generateKeyPair = (p, q, e) => {
   // The public key is the pair (e, m), and the private key is the pair (d, m).
   // The RSA module m is the product of the prime numbers p and q.
@@ -122,21 +107,20 @@ const generateKeyPair = (p, q, e) => {
  
 
 const App = () => {
+  // The state variables p, q, m, e, and keys are initialized using the useState() hook.
   const [p, setP] = useState('');
   const [q, setQ] = useState('');
   const [m, setM] = useState('');
   const [e, setE] = useState('');
   const [ keys, setKeys ] = useState(null);
 
-  // We randomly choose two prime numbers p and q with p ≠ q.
 
+  // The handleDifferentRandomPrimes() function generates two prime numbers p and q.
   const handleDifferentRandomPrimes = () => {
-    // generate two prime numbers p and q. 
-    //It calls the function generatePrime() to generate a prime number between 100 and 1000.
+    // It calls the function createPrime() to generate a prime number between 100 and 1000.
     const primeP = createPrime(100, 1000);
     let primeQ = createPrime(100, 1000);
-    // The while loop makes sure tha p and q are different.
-    // It generates a new prime number until the p and qu are different.
+    // The while loop makes sure that if p and q are equal, it will generate a new prime number for q.
     while (primeP === primeQ) {
       primeQ = createPrime(100, 1000);
     }
@@ -145,23 +129,24 @@ const App = () => {
     setQ(primeQ);
     setM(primeP * primeQ);
   }
-
+  // The handleGenerateM() function generates the RSA module M manually.
+  // I have include this function to check the app is working properly using 11 and 13 as prime numbers.
   const handleGenerateM = () => {
     // p and q are converted to ingegers 
-    //p is the string to be converted, and  10 is the radix of decimal number system.
+    // p and q are the strings to be converted, and  10 is the radix of decimal number system.
     const primeP = parseInt(p, 10);
     const primeQ = parseInt(q, 10);
     // Now we check the validity of the prime numbers p and q.
     if (!isNaN(primeP) && !isNaN(primeQ)) {
       const manualN = primeP * primeQ;
-      // Updating the state variable n.
+      // Updating the state variable m.
       setM(manualN);
     } else {
       alert('Please enter two prime numbers');
     }
   }
 
-
+  // The handleGenerateE() function generates the coprime number e.
   const handleGenerateE = () => {
     // To generate e, fist we calculate the Euler's totient function φ(M) = (p - 1)(q - 1).
     const phiM = (p - 1) * (q - 1);
@@ -173,8 +158,9 @@ const App = () => {
     }
     setE(e);
   }
-
+  // The handleGenerateKeys() function generates the public and private keys.
   const handleGenerateKeys = () => {
+    // If p, q, and e exist, the function generateKeyPair() is called to generate the key pair.
     if(p && q && e){
       const keyPair = generateKeyPair(parseInt(p, 10), parseInt(q, 10), parseInt(e, 10));
       setKeys(keyPair);
@@ -183,6 +169,10 @@ const App = () => {
     }
   }
 
+  // The App component has three parts:
+  // The TextField components display the prime numbers p and q, the RSA module M, the coprime number e, the public key, and the private key.
+  // The Button components generate prime numbers, the RSA module M, the coprime number e, and the key pair.
+  // The IconButton component refreshes the RSA module M.
   return (
     <Container>
     <Box my={4}>
@@ -190,7 +180,7 @@ const App = () => {
         RSA Key Pair Generator
       </Typography>
       
-      {/* Part 1: Generate Primes */}
+      {/* Part 1: Generate Primes. It generate the prime number p, q. It also generate RSA module */}
       <Box my={2}>
         <Typography variant="h6" gutterBottom>
           Step 1: Click the button to generate prime numbers p, q, and RSA module M.
@@ -235,7 +225,7 @@ const App = () => {
         />
       </Box>
 
-      {/* Part 2: Generate e */}
+      {/* Part 2: It generates the e coprime */}
       <Box my={2}>
         <Typography variant="h6" gutterBottom>
           Step 2: Click the button to generate the coprime number e.
@@ -288,4 +278,5 @@ const App = () => {
 );
 }
 
+// Exporting the App component as the default component.
 export default App;
