@@ -6,8 +6,8 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 
 // Declaring the functions to be used in the App component.
 
-// Function to check that a number is prime.
-const isPrimeNumber = (num) => {
+/// The function checkPrime checks if a number is prime.
+const checkPrime = (num) => {
   if (num <= 1) return false;
   if (num <= 3) return true;
   if (num % 2 === 0 || num % 3 === 0) return false;
@@ -17,49 +17,45 @@ const isPrimeNumber = (num) => {
   return true;
 }
 
-// Function to create a new prime number taking two parameters min and max.
+// The function createPrime generates a new prime number taking two parameters min and max.
 const createPrime = (min, max) => {
   let prime = Math.floor(Math.random() * (max - min)) + min;
-  while(!isPrimeNumber(prime)){
+  while(!checkPrime(prime)){
     prime = Math.floor(Math.random() * (max - min)) + min;
   } 
   return prime;
 }
 
-// Function to calculate the greatest common divisor
+// The function gcd calculates the Greatest Common Divisor
 const gcd = (a, b) => {
   if(b === 0) return a;
   return gcd(b, a % b);
 }
 
-// Function to perform the extended euclidean algorithm
-const extendedEuclidean = (a, b) => {
+// The extendedEuclideanAlgorithm function performs the extended euclidean algorithm.
+const extendedEuclideanAlgorithm = (a, b) => {
   if(a === 0) return [b, 0, 1];
-  const [gcd, x1, y1] = extendedEuclidean(b % a, a);
+  const [gcd, x1, y1] = extendedEuclideanAlgorithm(b % a, a);
   const x = y1 - Math.floor(b / a) * x1;
   const y = x1;
   return [gcd, x, y];
 }
 
-// Function to calculate the modular inverse with respect to φ(M), which helps to calculate d which is our objective
+// The modularInverse function calculates the modular inverse with respect to φ(M), which we needed to calculate d.
 const modularInverse = (a, m) => {
-  const [gcd, x] = extendedEuclidean(a, m);
+  const [gcd, x] = extendedEuclideanAlgorithm(a, m);
   if(gcd !== 1) return null;
   return (x % m + m) % m;
 } 
 
-// Function to generate keys pair
-const generateKeyPair = (p, q, e) => {
+// The keyPairGeneration generates keys pair.
+const keyPairGeneration = (p, q, e) => {
   const m = p * q;
   const phiM = (p - 1) * (q - 1);
   let d = modularInverse(e, phiM);
   return [[e, m], [d, m]];
 }
  
-// Generate the key parir using the prime numbers 11, 13 and coprime e = 23.
-const keyPair = generateKeyPair(11, 13, 23);
-console.log (keyPair);
-
 const App = () => {
   // The state variables p, q, m, e, and keys are initialized using the useState() hook.
   const [p, setP] = useState('');
@@ -119,7 +115,7 @@ const App = () => {
   const handleGenerateKeys = () => {
     // If p, q, and e exist, the function generateKeyPair() is called to generate the key pair.
     if(p && q && e){
-      const keyPair = generateKeyPair(parseInt(p, 10), parseInt(q, 10), parseInt(e, 10));
+      const keyPair = keyPairGeneration(parseInt(p, 10), parseInt(q, 10), parseInt(e, 10));
       setKeys(keyPair);
     } else {
       alert('Please generate prime numbers and e before generating keys');

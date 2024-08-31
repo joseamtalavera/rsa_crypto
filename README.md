@@ -1,3 +1,17 @@
+## Generation of the Key Pair
+
+I have recently completed the Mathematics I course corresponding to this Computer Science degree, in which I gained a deep understanding of the RSA cryptosystem and how we can generate a private key and a public key, which are later used in encryption and decryption. We can see how from a prime number we can generate public and private keys, which are often used in cryptography. This is something I find interesting and important for future studies. I think the best way to put this knowledge into practice is to develop an application that demonstrates how JavaScript can generate an RSA key pair. Through the implementation of JavaScript, we have observed how it is possible to write algorithms that apply these mathematical concepts learned in another course of this degree. It has undoubtedly helped me to understand every detail of the RSA cryptosystem. It will be a method that I will use for learning in the future.
+ 
+In this assignment we will follow the following steps to generate an RSA key pair (Paar & Pelzl, 2010):
+ 
+- Pick two prime random numbers p and q.
+- Calculate the RSA modulus (M), represented as the product of the two primes M:= p - q.
+- Calculate Eurle's φ of M: φ(M) = φ(p - q) = φ(p) - φ(q) = (p - 1) - (q - 1).
+- Generate prime e and coprine with φ (M) with 1 < e < φ(M). Then gcd(e, φ(M)) = 1, which is essential for computing the modular inverse d.
+- We get the modular inverse (d) of e with ed ≡ 1 mod φ(M), so φ(M)|(1 - ed). In this case we use
+ Extended Euclidean Algorithm and Bezóut Identity.
+- The public key is generated as a tuple (e, M) and the private key is generated as a tuple (d, M).
+
 # Getting Started with rsa_crypto App
 
 This project was bootstrapped with [Create React App].
@@ -28,19 +42,4 @@ The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
 
-### `npm run eject`
 
-
-## Generation of the Key Pair
-
-Before we can encrypt messages with the RSA algorithm, we must first generate a key pair consisting of a public and private key. To this end we proceed as follows:
-
-1. We randomly choose two prime numbers p and q with p ≠ q.
-2. We calculate the product of the two prime numbers M := p · q. We call M the RSA module.
-3. We calculate Euler’s φ function of M. Because M is a product of prime numbers and Euler’s φ function is multiplicative it applies that:
-   
-   φ(M) = φ(p · q) = φ(p) · φ(q) = (p − 1) · (q − 1).
-
-4. We choose a number e that is coprime to φ(M) with 1 < e < φ(M). Thus gcd(e, φ(M)) = 1.
-5. We determine a number d with ed ≡ 1 mod φ(M), thus φ(M)|(1 − ed). For this we can use, for example, the extended Euclidean algorithm.
-6. The public key is the tuple (e, M). The private key is the tuple (d, M). The numbers p, q and φ(M) are no longer needed after the key pair has been generated and can be deleted or destroyed.
