@@ -2,7 +2,7 @@
 
 I have recently completed the Mathematics I course corresponding to this Computer Science degree, in which I gained a deep understanding of the RSA cryptosystem and how we can generate a private key and a public key, which are later used in encryption and decryption. We can see how from a prime number we can generate public and private keys, which are often used in cryptography. This is something I find interesting and important for future studies. I think the best way to put this knowledge into practice is to develop an application that demonstrates how JavaScript can generate an RSA key pair. Through the implementation of JavaScript, we have observed how it is possible to write algorithms that apply these mathematical concepts learned in another course of this degree. It has undoubtedly helped me to understand every detail of the RSA cryptosystem. It will be a method that I will use for learning in the future.
  
-In this assignment we will follow the following steps to generate an RSA key pair (Paar & Pelzl, 2010):
+In this assigment we will follow the following steps to generate an RSA key pair (Paar & Pelzl, 2010):
  
 - Pick two prime random numbers p and q.
 - Calculate the RSA modulus (M), represented as the product of the two primes M:= p - q.
@@ -38,8 +38,7 @@ See the section about [running tests].
 Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+
 
 
 
