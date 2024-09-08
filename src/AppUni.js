@@ -40,8 +40,8 @@ const checkPrime = (num) => {
 const createPrime = (min, max) => {
   // The Math.random() function generates a random floating point number between 0 (inclusive) and 1 (exclusive).
   // The Math.floor() function rounds the number to the nearest integer.
-  // *(max - min) makes the range [0, max - min]. It generates a random number between 0 and max - min.
-  // Adding min to the above expression makes the range [min, max]. Here '[' means inclusive. And ')' means exclusive. 
+  // *(max - min) makes the range [0, max - min). It generates a random number between 0 and max - min.
+  // Adding min to the above expression makes the range [min, max). Here '[' means inclusive. And ')' means exclusive. 
   let primeNumber = Math.floor(Math.random() * (max - min)) + min;
   while(!checkPrime(primeNumber)){
     // The while loop generates a new prime until the generated number is a prime. 
